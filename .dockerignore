@@ -1,0 +1,14 @@
+# Git
+.git
+.gitignore
+
+# docker
+.docker
+# python
+app/__pycatche__/
+app/*/__pycatche__/
+app/*/*/__pycatche__/
+app/*/*/*/__pycatche__/
+.env/
+.venv/
+venv/
