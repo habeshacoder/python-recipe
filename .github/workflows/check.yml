@@ -20,9 +20,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Docker Images
-        run: docker-compose build
-
       - name: Run Tests
         run: docker-compose run --rm app sh -c "python manage.py test"
 
