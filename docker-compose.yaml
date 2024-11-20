@@ -4,7 +4,7 @@ services:
     build: 
       context: .
       args:
-        - DEV=true
+        DEV: true  # Removed the dash for a cleaner format
     image: app
     ports:
       - "8000:8000"
@@ -12,3 +12,22 @@ services:
       - ./app:/app
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
+    environment:
+      DB_HOST: db 
+      DB_NAME: postgres
+      DB_USER: postgres
+      DB_PASS: postgres
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - dev-db-data:/var/lib/postgresql/data  # Added space after the hyphen
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres 
+
+volumes:
+  dev-db-data:
