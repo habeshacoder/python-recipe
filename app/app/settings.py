@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -77,12 +78,14 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': os.environ.get('DB_HOST'),
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),  # Should be 'db'
+        'NAME': os.environ.get('DB_NAME'),  # Should be 'postgres'
+        'USER': os.environ.get('DB_USER'),  # Should be 'postgres'
+        'PASSWORD': os.environ.get('DB_PASSWORD'),  # Should be 'postgres'
+        'PORT': 5432,
     }
 }
+
 
 
 # Password validation

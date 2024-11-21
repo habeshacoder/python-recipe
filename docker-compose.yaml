@@ -11,9 +11,11 @@ services:
     volumes:
       - ./app:/app
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
+      sh -c "python manage.py wait_for_db &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
     environment:
-      DB_HOST: db 
+      DB_HOST: db
       DB_NAME: postgres
       DB_USER: postgres
       DB_PASS: postgres
@@ -22,12 +24,14 @@ services:
 
   db:
     image: postgres:13-alpine
+    ports:
+      - "5432:5432"
     volumes:
-      - dev-db-data:/var/lib/postgresql/data  # Added space after the hyphen
+      - dev-db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres 
+      POSTGRES_DB: postgres
 
 volumes:
   dev-db-data:
