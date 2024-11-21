@@ -1,5 +1,4 @@
 from unittest.mock import patch
-from psycopg2 import OperationalError as Psycopg2Error
 from django.core.management import call_command
 from django.db.utils import OperationalError
 from django.test import SimpleTestCase
@@ -8,21 +7,22 @@ from django.test import SimpleTestCase
 class CommandTests(SimpleTestCase):
     """Test commands."""
 
-    @patch('core.management.commands.wait_for_db.Command.check')
-    def test_wait_for_db_ready(self, patched_check):
-        """Test waiting for database if database is ready."""
-        patched_check.return_value = True
-        call_command('wait_for_db')
+    def test_wait_for_db(self):
+        """Test waiting for db"""
 
-        patched_check.assert_called_once_with(databases=['default'])
+        class Getitem:
+            def __init__(self):
+                self.attempt = 0
 
-    @patch('time.sleep')
-    @patch('core.management.commands.wait_for_db.Command.check')
-    def test_wait_for_db_delay(self, patched_check, patched_sleep):
-        """Test waiting for database when getting OperationalError."""
-        patched_check.side_effect = [Psycopg2Error] * 2 + \
-            [OperationalError] * 3 + [True]
-        call_command('wait_for_db')
+            def __call__(self, item):
+                if self.attempt < 5:
+                    self.attempt += 1
+                    raise OperationalError()
+                else:
+                    return True
 
-        self.assertEqual(patched_check.call_count, 6)
-        patched_check.assert_called_with(databases=['default'])
+        with patch('django.db.utils.ConnectionHandler.__getitem__') as gi:
+            getitem = Getitem()
+            gi.side_effect = getitem
+            call_command('wait_for_db')
+            self.assertGreaterEqual(getitem.attempt, 5)

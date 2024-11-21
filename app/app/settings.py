@@ -81,7 +81,7 @@ DATABASES = {
         'HOST': os.environ.get('DB_HOST'),  # Should be 'db'
         'NAME': os.environ.get('DB_NAME'),  # Should be 'postgres'
         'USER': os.environ.get('DB_USER'),  # Should be 'postgres'
-        'PASSWORD': os.environ.get('DB_PASSWORD'),  # Should be 'postgres'
+        'PASSWORD': os.environ.get('DB_PASS'),  # Should be 'postgres'
         'PORT': 5432,
     }
 }
