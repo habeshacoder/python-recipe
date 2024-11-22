@@ -40,6 +40,4 @@ class ModelTests(TestCase):
             email='testsuperuser@example.com', password='testpass123')
 
         self.assertTrue(user.is_superuser)
-        print('-------------------------')
-        print(user.is_superuser)
         self.assertTrue(user.is_staff)
